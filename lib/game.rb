@@ -7,12 +7,42 @@ word_list_filtered = word_list.select { |word| word.length > 5 && word.length < 
 def start_game(word_list)
   guesses_left = 10
   word_guessed = false
+  guessed_letters = []
   random_word = word_list.sample
-  letter_guess_array = Array.new(random_word.length, '_')
+  letter_guess_array = Array.new(random_word.length - 1, '_')
+
   until word_guessed || guesses_left.zero?
     puts letter_guess_array.join(' ')
-    guesses_left -= 1
+    puts "Incorrect guesses left: #{guesses_left}"
+    puts "Guessed letter: #{guessed_letters}"
+    guessed_letter = gets.chomp.downcase[0]
+    next if guessed_letters.include?(guessed_letter)
+
+    guessed_letters << guessed_letter
+    if check_letter(letter_guess_array, guessed_letter, random_word)
+      letter_guess_array = check_letter(letter_guess_array, guessed_letter, random_word)
+    else
+      guesses_left -= 1
+    end
+
   end
+
+  if guesses_left.zero?
+    puts "tough luck! Word was #{random_word}"
+  end
+end
+
+def check_letter(letter_guess_array, guessed_letter, random_word)
+  return_value = nil
+
+  letter_guess_array.each_with_index do |_, index|
+    if guessed_letter == random_word[index]
+      letter_guess_array[index] = random_word[index]
+      return_value = letter_guess_array
+    end
+  end
+
+  return_value
 end
 
 puts 'Welcome to Hangman! type "start" to start the game.'
