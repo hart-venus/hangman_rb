@@ -1,8 +1,18 @@
 # frozen_string_literal: true
-
+require 'json'
 word_list_file = File.open('../google-10000-english-no-swears.txt')
 word_list = word_list_file.readlines
 word_list_filtered = word_list.select { |word| word.length > 5 && word.length < 12 }
+
+def save(guessed_letters, letter_guess_array, random_word)
+  save_hash = {
+    guesses:guessed_letters,
+    array:letter_guess_array,
+    word:random_word
+  }
+  File.open('save.json', 'w'){|f| f.write(save_hash.to_json)}
+  # puts "#{guessed_letters} #{letter_guess_array}, #{random_word}"
+end
 
 def start_game(word_list)
   guesses_left = 10
@@ -16,8 +26,10 @@ def start_game(word_list)
     puts "Incorrect guesses left: #{guesses_left}"
     puts "Guessed letters: #{guessed_letters}"
     input = gets.chomp.downcase
-    break if input == 'save'
-
+    if input == 'save'
+      save(guessed_letters, letter_guess_array, random_word) 
+      break
+    end
     guessed_letter = input[0]
     if guessed_letters.include?(guessed_letter)
       puts 'You already guessed that letter!'
