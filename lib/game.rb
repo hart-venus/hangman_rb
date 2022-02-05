@@ -27,9 +27,7 @@ def start_game(word_list)
 
   end
 
-  if guesses_left.zero?
-    puts "tough luck! Word was #{random_word}"
-  end
+  puts "tough luck! Word was #{random_word}" if guesses_left.zero?
 end
 
 def check_letter(letter_guess_array, guessed_letter, random_word)
