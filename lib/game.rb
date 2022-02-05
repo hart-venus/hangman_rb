@@ -14,13 +14,20 @@ def start_game(word_list)
   until word_guessed || guesses_left.zero?
     puts letter_guess_array.join(' ')
     puts "Incorrect guesses left: #{guesses_left}"
-    puts "Guessed letter: #{guessed_letters}"
+    puts "Guessed letters: #{guessed_letters}"
     guessed_letter = gets.chomp.downcase[0]
-    next if guessed_letters.include?(guessed_letter)
+    if guessed_letters.include?(guessed_letter)
+      puts 'You already guessed that letter!'
+      next
+    end
 
     guessed_letters << guessed_letter
     if check_letter(letter_guess_array, guessed_letter, random_word)
       letter_guess_array = check_letter(letter_guess_array, guessed_letter, random_word)
+      unless letter_guess_array.include?('_')
+        puts "Congrats! You guessed #{random_word} with #{guesses_left} guesses left."
+        break
+      end
     else
       guesses_left -= 1
     end
