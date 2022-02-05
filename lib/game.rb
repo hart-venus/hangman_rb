@@ -15,9 +15,17 @@ def start_game(word_list)
     puts letter_guess_array.join(' ')
     puts "Incorrect guesses left: #{guesses_left}"
     puts "Guessed letters: #{guessed_letters}"
-    guessed_letter = gets.chomp.downcase[0]
+    input = gets.chomp.downcase
+    break if input == 'save'
+
+    guessed_letter = input[0]
     if guessed_letters.include?(guessed_letter)
       puts 'You already guessed that letter!'
+      next
+    end
+
+    if guessed_letter.nil?
+      puts 'please input a letter.'
       next
     end
 
@@ -50,5 +58,5 @@ def check_letter(letter_guess_array, guessed_letter, random_word)
   return_value
 end
 
-puts 'Welcome to Hangman! type "start" to start the game.'
+puts 'Welcome to Hangman! type "start" to start the game. Type "save" anytime to save the game.'
 start_game(word_list_filtered) if gets.chomp == 'start'
